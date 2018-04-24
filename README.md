@@ -2,7 +2,7 @@
 Android Simple Call Service
 
 
-**server run: **
+**server run:**
 ```
 gradle run
 ```
