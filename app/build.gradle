@@ -1,0 +1,100 @@
+/*
+ *    Copyright  2018 Geno Papashvili
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
+apply plugin: 'com.android.application'
+
+android {
+
+    signingConfigs {
+        config {
+            storeFile file('/home/freya/Android/simple.jks')
+            keyAlias 'alias'
+            keyPassword 'ez1dau2varzen'
+            storePassword 'ez1dau2varzen'
+        }
+    }
+
+    def _versionCode=0
+    def versionPropsFile = file('version.properties')
+    def Properties versionProps = new Properties()
+    if(versionPropsFile.exists())
+        versionProps.load(new FileInputStream(versionPropsFile))
+    def _patch = (versionProps['PATCH'] ?: "0").toInteger() + 1
+    def _major = (versionProps['MAJOR'] ?: "0").toInteger()
+    def _minor = (versionProps['MINOR'] ?: "0").toInteger()
+    List<String> runTasks = gradle.startParameter.getTaskNames();
+    def value = 0
+    for (String item : runTasks)
+        if ( item.contains("assembleRelease")) {
+            value = 1;
+        }
+    _versionCode = (versionProps['VERSION_CODE'] ?: "0").toInteger() + value
+    if(_patch==99)
+    {
+        _patch=0
+        _minor=_minor+1
+    }
+    if(_major==99){
+        _major=0
+        _major=_major+1
+    }
+
+    versionProps['MAJOR']=_major.toString()
+    versionProps['MINOR']=_minor.toString()
+    versionProps['PATCH']=_patch.toString()
+    versionProps['VERSION_CODE']=_versionCode.toString()
+    versionProps.store(versionPropsFile.newWriter(), null)
+    def _versionName = "${_major}.${_versionCode}.${_minor}.${_patch}"
+
+    compileSdkVersion 27
+    defaultConfig {
+        applicationId "ge.simple"
+        minSdkVersion 15
+        targetSdkVersion 27
+
+        versionCode _versionCode
+        versionName _versionName
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable false
+            jniDebuggable false
+            signingConfig signingConfigs.config
+        }
+    }
+    buildToolsVersion '27.0.3'
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support:design:27.1.1'
+    implementation 'com.google.guava:guava:23.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+}
+
+
+
+
