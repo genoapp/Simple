@@ -16,6 +16,7 @@
 
 package ge.simple.util;
 
+import ge.gnio.AbstractClient;
 import ge.gnio.Packet;
 import ge.gnio.Server;
 import ge.simple.server.Person;
@@ -37,21 +38,25 @@ public class PendingClose implements Runnable {
     @Override
     public void run() {
        Packet packet = new Packet(-1).writeBoolean(true).flip();
-        Stream<Person> stream = server.getClients();
+
         AtomicInteger closed = new AtomicInteger();
-        Iterator<Person> people = stream.iterator();
-        while(people.hasNext()){
-            Person p = people.next();
-            if(p.getLastReadTime() != 0) {
-                if (p.getLastReadTime() + 60000 < Calendar.getInstance().getTimeInMillis()) {
+
+
+        server.getClients().filter(AbstractClient::isConnected)
+                .filter(p -> p.getLastReadTime()+ 60000 < Calendar.getInstance().getTimeInMillis())
+                .forEach(p ->{
                     p.close();
                     closed.getAndIncrement();
-                } else if (p.getLastReadTime() + 45000 < Calendar.getInstance().getTimeInMillis()) {
+                });
+
+        server.getClients().filter(AbstractClient::isConnected)
+                .filter(p -> p.getLastReadTime()+ 5000 < Calendar.getInstance().getTimeInMillis())
+                .forEach(p ->{
                     p.sendPacket(packet);
-                }
-            }
-        }
+                    System.out.println("send update packet: "+p.getNumber());
+                });
+
         System.out.println("PendingClose: "+ closed.get());
-        server.runLater(this,10000);
+        server.runLater(this,7000);
     }
 }

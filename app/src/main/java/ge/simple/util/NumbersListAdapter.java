@@ -43,7 +43,7 @@ public class NumbersListAdapter extends BaseAdapter {
     public NumbersListAdapter(SimpleApplication context) {
         this.context = context;
         this.list = new ArrayList<>();
-        this.updateRunnable = new UpdateDoBackground();
+        this.updateRunnable = new UpdateRunner();
     }
 
     private void update(){
@@ -56,7 +56,7 @@ public class NumbersListAdapter extends BaseAdapter {
         }
     }
 
-    private class UpdateDoBackground implements Runnable{
+    private class UpdateRunner implements Runnable{
 
         @Override
         public void run() {

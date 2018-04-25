@@ -30,6 +30,7 @@ import ge.gnio.Server;
 import ge.simple.server.Person;
 import ge.simple.server.listeners.CallAnswer;
 import ge.simple.server.listeners.CallRequest;
+import ge.simple.server.listeners.FreeListener;
 import ge.simple.server.listeners.InputBuffer;
 import ge.simple.services.CallService;
 import ge.simple.util.DoBackground;
@@ -59,10 +60,11 @@ public class SimpleApplication extends Application {
 
 
         try {
-            server = new Server<>(Person.class, 10 * 1024, Executors.newFixedThreadPool(2), null);
+            server = new Server<>(Person.class, 10 * 1024, Executors.newFixedThreadPool(1), null);
             server.addPacketListener(25, new CallRequest());
             server.addPacketListener(30, new CallAnswer());
             server.addPacketListener(40, new InputBuffer());
+            server.addPacketListener(-1, new FreeListener());
 
 
             DoBackground background = new DoBackground();
@@ -78,7 +80,7 @@ public class SimpleApplication extends Application {
                 public void run() {
                     if (person == null || !person.isConnected()) {
                         try {
-                            person = server.connect(new InetSocketAddress("127.0.0.1", 9090));
+                            person = server.connect(new InetSocketAddress("85.114.245.107", 9090));
                             person.setApplicationContext(SimpleApplication.this);
                             person.sendPacket(new Packet(10).writeString(person.getNumber()).flip());
                         } catch (IOException e) {
@@ -117,7 +119,7 @@ public class SimpleApplication extends Application {
     public void onTerminate() {
         if (server != null) {
             server.close();
-            Log.i(TAG, "Server closed");
+            Log.i(TAG, "App terminated");
         }
         super.onTerminate();
     }
