@@ -20,7 +20,7 @@ import ge.gnio.Server;
 import ge.simple.server.Filter;
 import ge.simple.server.Person;
 import ge.simple.server.listener.*;
-import ge.simple.util.PendingClose;
+import ge.simple.server.PendingClose;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;

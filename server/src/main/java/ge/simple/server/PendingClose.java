@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ge.simple.util;
+package ge.simple.server;
 
 import ge.gnio.AbstractClient;
 import ge.gnio.Packet;
