@@ -104,21 +104,23 @@ public class CallActivity extends SimpleCompatActivity {
             cancelBut.setLayoutParams(params);
 
 
-            byte lvl = getApplicationContext().getCallService().call(number, request);
+            getApplicationContext().getBackgroundHandler().post(()->{
+                byte lvl = getApplicationContext().getCallService().call(number, request);
 
-            String message = "";
-            switch (lvl) {
-                case -1:
-                    message = "Client is offline";
-                    break;
-                case 0:
-                    message = "Client is busy";
-                    break;
-            }
-            if (lvl != 1) {
-                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-                finish();
-            }
+                String message = "";
+                switch (lvl) {
+                    case -1:
+                        message = "Client is offline";
+                        break;
+                    case 0:
+                        message = "Client is busy";
+                        break;
+                }
+                if (lvl != 1) {
+                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            });
 
         } else {
             RelativeLayout.LayoutParams aParams = (RelativeLayout.LayoutParams) answerBut.getLayoutParams();

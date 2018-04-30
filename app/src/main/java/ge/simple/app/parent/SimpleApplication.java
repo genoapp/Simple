@@ -60,7 +60,7 @@ public class SimpleApplication extends Application {
 
 
         try {
-            server = new Server<>(Person.class, 10 * 1024, Executors.newFixedThreadPool(1), null);
+            server = new Server<>(Person.class, 13 * 1024, Executors.newFixedThreadPool(1),10, null);
             server.addPacketListener(25, new CallRequest());
             server.addPacketListener(30, new CallAnswer());
             server.addPacketListener(40, new InputBuffer());

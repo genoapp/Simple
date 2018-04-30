@@ -30,7 +30,7 @@ public class SimpleServer {
 
 
     public static void main(String[] args) throws IOException {
-        Server<Person> server = new Server<>(Person.class, 10 * 1024,Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()),new Filter());
+        Server<Person> server = new Server<>(Person.class, 13000,Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()),10,new Filter());
 
         server.addPacketListener(5,new NumberList());
         server.addPacketListener(10,new InitialService());

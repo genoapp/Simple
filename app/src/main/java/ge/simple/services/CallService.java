@@ -53,7 +53,7 @@ public class CallService{
     private  AudioRecord output;
 
     private static final int SAMPLE_RATE = 8000;
-    private static final int BUFFER_SIZE = 2048;
+    private static final int BUFFER_SIZE = 12000;
 
 
     private volatile boolean isIOStart = false;
@@ -135,9 +135,9 @@ public class CallService{
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 input.write(buffer, buffer.limit(), AudioTrack.WRITE_NON_BLOCKING);
             } else {
-                byte[] b = new byte[buffer.limit()];
-                buffer.get(b);
-                input.write(b, 0, b.length);
+                byte[] bytes = new byte[buffer.limit()];
+                buffer.get(bytes);
+                input.write(bytes, 0,bytes.length);
             }
             input.flush();
         }
@@ -271,7 +271,7 @@ public class CallService{
         }
     }
 
-    @SuppressWarnings("unused")
+/*    @SuppressWarnings("unused")
     private static byte[] compress(byte[] uncompressedData) {
         ByteArrayOutputStream bos = null;
         GZIPOutputStream gzipOS = null;
@@ -329,7 +329,7 @@ public class CallService{
             }
         }
         return new byte[]{};
-    }
+    }*/
 
 
 }

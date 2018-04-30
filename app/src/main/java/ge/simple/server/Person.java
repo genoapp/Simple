@@ -34,12 +34,6 @@ public class Person extends AbstractClient<Person> {
 
     private String number;
 
-    public Person(Server<Person> server, SelectionKey selectionKey) {
-        super(server, selectionKey);
-        number = Integer.toString(new Random().nextInt()).substring(1);
-
-    }
-
     public void setApplicationContext(SimpleApplication applicationContext) {
         this.applicationContext = applicationContext;
     }
@@ -50,5 +44,10 @@ public class Person extends AbstractClient<Person> {
 
     public SimpleApplication getApplicationContext() {
         return applicationContext;
+    }
+
+    @Override
+    public void initial() {
+        number = Integer.toString(new Random().nextInt()).substring(1);
     }
 }

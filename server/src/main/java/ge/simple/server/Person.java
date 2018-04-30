@@ -29,10 +29,6 @@ public class Person extends AbstractClient<Person> {
     private String number;
     private Person target;
 
-    public Person(Server<Person> server, SelectionKey selectionKey) {
-        super(server, selectionKey);
-    }
-
     public void checkInetAddress() {
 
     }
@@ -61,5 +57,10 @@ public class Person extends AbstractClient<Person> {
         return people
                 .filter(p -> p.getNumber() != null && p.getNumber().equals(number))
                 .findAny();
+    }
+
+    @Override
+    public void initial() {
+
     }
 }

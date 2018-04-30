@@ -48,7 +48,8 @@ public class MainActivity extends SimpleCompatActivity {
             if(parent.getAdapter() instanceof NumbersListAdapter) {
                 NumbersListAdapter adapter = (NumbersListAdapter) parent.getAdapter();
 
-                Intent intent = new Intent(getApplicationContext(),CallActivity.class);
+                Intent intent = new Intent(getApplicationContext(),CallActivity.class)
+                        .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra("number", adapter.getItem(position));
                 intent.putExtra("request", CallService.CALL_REQUEST_OUT);
                 startActivity(intent);

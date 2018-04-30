@@ -37,7 +37,8 @@ public class CallRequest implements PacketListener<Person> {
             byte lvl = person.getApplicationContext().getCallService().call(number, CallService.CALL_REQUEST_IN);
             person.sendPacket(packet.clear().writeByte(lvl).flip());
             if(lvl == 1){
-                Intent intent = new Intent(person.getApplicationContext(),CallActivity.class);
+                Intent intent = new Intent(person.getApplicationContext(),CallActivity.class)
+                        .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra("number",number);
                 intent.putExtra("request",CallService.CALL_REQUEST_IN);
                 person.getApplicationContext().getCurrentActivity().startActivity(intent);
