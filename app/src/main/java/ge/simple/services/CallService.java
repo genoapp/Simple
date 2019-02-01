@@ -64,7 +64,6 @@ public class CallService{
     private boolean zoommerStart = false;
 
 
-    private byte[] gzDeBuffer = new byte[BUFFER_SIZE];
 
 
 
