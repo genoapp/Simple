@@ -24,13 +24,16 @@ import ge.simple.server.PendingClose;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class SimpleServer {
 
 
     public static void main(String[] args) throws IOException {
-        Server<Person> server = new Server<>(Person.class, 13000,Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()),10,new Filter());
+        ExecutorService es = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+        Server<Person> server = new Server<>(Person.class, 13000,es,10,new Filter());
 
         server.addPacketListener(5,new NumberList());
         server.addPacketListener(10,new InitialService());
@@ -39,8 +42,16 @@ public class SimpleServer {
         server.addPacketListener(40,new SpeakBufferListener());
 
         server.runLater(new PendingClose(server));
-
-        server.open(new InetSocketAddress(9090));
+        InetSocketAddress address = new InetSocketAddress(9090);
+        server.open(address);
         System.out.println("server start");
+        System.out.println("IP address "+address.getHostName());
+        System.out.println("PORT "+ address.getPort());
+
+        System.out.println("press any key to exit server");
+        Scanner scanner = new Scanner(System.in);
+        scanner.nextLine();
+        server.close();
+        es.shutdown();
     }
 }

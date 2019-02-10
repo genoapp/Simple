@@ -16,12 +16,8 @@
 
 package ge.simple.services;
 
-import android.media.AudioFormat;
-import android.media.AudioManager;
-import android.media.AudioRecord;
-import android.media.AudioTrack;
-import android.media.MediaPlayer;
-import android.media.MediaRecorder;
+import android.annotation.TargetApi;
+import android.media.*;
 import android.os.Build;
 
 import java.io.ByteArrayInputStream;
@@ -31,6 +27,7 @@ import java.nio.ByteBuffer;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import android.util.Log;
 import ge.gnio.Packet;
 import ge.simple.R;
 import ge.simple.app.parent.SimpleApplication;
@@ -122,10 +119,24 @@ public class CallService{
     }
 
     private AudioTrack audioTrack(){
-       return new AudioTrack(AudioManager.STREAM_VOICE_CALL,
-                SAMPLE_RATE, AudioFormat.CHANNEL_OUT_MONO,
-                AudioFormat.ENCODING_PCM_16BIT,
-                BUFFER_SIZE, AudioTrack.MODE_STREAM);
+
+
+       return new AudioTrack(new AudioAttributes.Builder()
+                        .setLegacyStreamType(AudioManager.STREAM_VOICE_CALL)
+                        .build(),
+                new AudioFormat.Builder()
+                        .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
+                        .setSampleRate(SAMPLE_RATE)
+                        .setChannelMask(AudioFormat.CHANNEL_OUT_MONO)
+                        .build(),
+                BUFFER_SIZE,
+                AudioTrack.MODE_STREAM,
+                AudioManager.AUDIO_SESSION_ID_GENERATE);
+
+                  /* return new AudioTrack(AudioManager.STREAM_VOICE_CALL,
+                    SAMPLE_RATE, AudioFormat.CHANNEL_OUT_MONO,
+                    AudioFormat.ENCODING_PCM_16BIT,
+                    BUFFER_SIZE, AudioTrack.MODE_STREAM);*/
     }
 
 
