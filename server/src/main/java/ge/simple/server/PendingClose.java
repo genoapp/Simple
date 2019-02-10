@@ -55,8 +55,6 @@ public class PendingClose implements Runnable {
                     p.sendPacket(packet);
                     System.out.println("send update packet: "+p.getNumber());
                 });
-
-        System.out.println("PendingClose: "+ closed.get());
         server.runLater(this,7000);
     }
 }

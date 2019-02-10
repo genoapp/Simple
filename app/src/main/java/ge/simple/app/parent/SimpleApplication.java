@@ -80,7 +80,7 @@ public class SimpleApplication extends Application {
                 public void run() {
                     if (person == null || !person.isConnected()) {
                         try {
-                            person = server.connect(new InetSocketAddress("85.114.245.107", 9090));
+                            person = server.connect(new InetSocketAddress("10.10.10.10", 9090));
                             person.setApplicationContext(SimpleApplication.this);
                             person.sendPacket(new Packet(10).writeString(person.getNumber()).flip());
                         } catch (IOException e) {

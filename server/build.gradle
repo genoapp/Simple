@@ -21,6 +21,11 @@ compileJava   {
     targetCompatibility = '1.8'
 }
 
+run {
+    standardInput = System.in
+}
+
+
 repositories{
     mavenCentral()
 }
